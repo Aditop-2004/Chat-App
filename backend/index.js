@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 dotenv.config({});
 
+import cors from "cors";
+
 import userRoute from "./routes/userRoute.js";
 import messageRoute from "./routes/messageRoute.js";
 
@@ -19,6 +21,15 @@ const PORT = process.env.PORT || 8080;
 //middleware must for parsing json data in req.body when doing post request
 app.use(express.json());
 app.use(cookieParser()); // needed to parse cookies
+app.use(express.urlencoded({ extended: true }));
+
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 //routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/message", messageRoute);
