@@ -10,3 +10,18 @@ html {
   background-blend-mode: lighten;
   background-color: rgba(255, 255, 255, 0.5); /* Lighten with white */
 }
+::-webkit-scrollbar {
+    /* Customize the scrollbar width */
+    width:6px;
+}
+
+::-webkit-scrollbar-track {
+    /* Customize the scrollbar track */
+    background:#000;
+}
+
+::-webkit-scrollbar-thumb {
+    /* Customize the scrollbar thumb */
+    border-radius:10px;
+    background:#000
+}

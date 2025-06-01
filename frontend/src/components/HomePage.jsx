@@ -1,13 +1,15 @@
 import React from "react";
+import Sidebar from "./Sidebar";
+import MessageContainer from "./MessageContainer";
 
 export default function HomePage() {
   return (
     <div
-      className="
-bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100
-"
+      className="flex sm:h-[450px] md:h-[500px] rounded-lg overflow-hidden bg-gray-400 bg-clip-padding backdrop-filter 
+    backdrop-blur-lg bg-opacity-0"
     >
-      Home Page
+      <Sidebar />
+      <MessageContainer />
     </div>
   );
 }

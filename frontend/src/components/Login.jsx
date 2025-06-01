@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "../redux/userSlice";
 export default function Login() {
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
+  const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     console.log(user);
     e.preventDefault();
@@ -21,13 +25,18 @@ export default function Login() {
         }
       );
       console.log(res);
-      setUser({
-        username: "",
-        password: "",
-      });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        dispatch(setAuthUser(res.data.user));
+      }
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.message);
     }
+    setUser({
+      username: "",
+      password: "",
+    });
   };
   return (
     <div className="min-w-96 mx-auto">
