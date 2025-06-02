@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
 import OtherUsers from "./OtherUsers.jsx";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import {
   setAuthUser,
   setOtherUsers,
@@ -11,9 +11,49 @@ import {
 } from "../redux/userSlice.js";
 import { useNavigate } from "react-router-dom";
 import { setMessages } from "../redux/messageSlice.js";
+import { useSelector, useDispatch } from "react-redux";
+// import toast from "react-hot-toast";
 export default function Sidebar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [allUsers, setAllUsers] = useState([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const allOtherUsers = await axios.get(
+          "http://localhost:8080/api/v1/user",
+          {
+            withCredentials: true,
+          }
+        );
+        if (allOtherUsers.data.success) {
+          setAllUsers(allOtherUsers.data.otherUsers);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetch();
+  });
+
+  const [input, setInput] = useState("");
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    // navigate(`/search/${input}`);
+    const filteredUsers = allUsers.filter((user) =>
+      user.fullName.toLowerCase().includes(input.toLowerCase())
+    );
+    if (filteredUsers) {
+      dispatch(setOtherUsers(filteredUsers));
+    } else {
+      dispatch(setOtherUsers([]));
+      toast.error("No user found");
+    }
+  };
+
   const logoutHandler = async () => {
     try {
       const res = await axios.get("http://localhost:8080/api/v1/user/logout");
@@ -37,8 +77,14 @@ export default function Sidebar() {
           className="input input-bordered rounded-md"
           type="text"
           placeholder="Search..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
         />
-        <button type="submit" className="btn  bg-slate-500 text-white">
+        <button
+          type="submit"
+          className="btn  bg-slate-500 text-white"
+          onClick={handleClick}
+        >
           <BiSearchAlt2 className="w-6 h-6 outline-none" />
         </button>
       </form>
