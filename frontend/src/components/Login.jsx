@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -10,6 +10,7 @@ export default function Login() {
     password: "",
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     console.log(user);
     e.preventDefault();
@@ -28,6 +29,7 @@ export default function Login() {
       if (res.data.success) {
         toast.success(res.data.message);
         dispatch(setAuthUser(res.data.user));
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
